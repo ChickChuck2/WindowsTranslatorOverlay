@@ -1,114 +1,347 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsTranslatorOverlay.Properties;
+using System.ServiceModel;
+using System.Threading;
+using IWshRuntimeLibrary;
 
 namespace WindowsTranslatorOverlay.Classes
 {
-    internal class OverlayWindow
+    internal class OverlayWindow : Form
     {
         private bool OverlayOpenned = false;
-        private Size RichBoxSize = new Size(200,100);
-        public void Overlay()
+        private bool BindingKey = false;
+
+        public float opacityOut;
+        public float opacityIn;
+
+        public Keys replaceKey;
+
+        KeyboardHook hook = new KeyboardHook();
+
+        private PictureBox pictureBox1;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private RichTextBox OriginalTextbox;
+        private PictureBox pictureBox2;
+        private RichTextBox TranslatedTextbox;
+        private Button CopyButton;
+        private Button translateButton;
+        private Button ReplaceTextButton;
+
+        public OverlayWindow()
         {
-            Form formOverlay = new Form();
-            Point MousePos = new Point(Cursor.Position.X, Cursor.Position.Y);
+            InitializeComponent();
+        }
 
-            Bitmap MoveImage = new Bitmap(Resources.move);
+        public static GoogleTranslator.LANG LangEntrada(GoogleTranslator.LANG Entrada = GoogleTranslator.LANG.auto)
+        {
+            return Entrada;
+        }
 
-            PictureBox moveBox = new PictureBox();
-            moveBox.SizeMode = PictureBoxSizeMode.Zoom;
-            moveBox.Location = new Point(0, 0);
-            moveBox.Size = new Size(50, 40);
-            moveBox.MouseMove += new MouseEventHandler((object sender, MouseEventArgs e) =>
+        public static GoogleTranslator.LANG LangSaida(GoogleTranslator.LANG Saida = GoogleTranslator.LANG.en)
+        {
+            return Saida;
+        }
+
+        private string TranslatedText = "";
+
+        private void InitializeComponent()
+        {
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.OriginalTextbox = new System.Windows.Forms.RichTextBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.TranslatedTextbox = new System.Windows.Forms.RichTextBox();
+            this.CopyButton = new System.Windows.Forms.Button();
+            this.ReplaceTextButton = new System.Windows.Forms.Button();
+            this.translateButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.pictureBox1.Image = global::WindowsTranslatorOverlay.Properties.Resources.move;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(50, 40);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.OriginalTextbox);
+            this.flowLayoutPanel1.Controls.Add(this.pictureBox2);
+            this.flowLayoutPanel1.Controls.Add(this.TranslatedTextbox);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 50);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(537, 106);
+            this.flowLayoutPanel1.TabIndex = 1;
+            // 
+            // OriginalTextbox
+            // 
+            this.OriginalTextbox.Location = new System.Drawing.Point(3, 3);
+            this.OriginalTextbox.Name = "OriginalTextbox";
+            this.OriginalTextbox.Size = new System.Drawing.Size(200, 100);
+            this.OriginalTextbox.TabIndex = 0;
+            this.OriginalTextbox.Text = "";
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::WindowsTranslatorOverlay.Properties.Resources.Iconequals;
+            this.pictureBox2.Location = new System.Drawing.Point(209, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(100, 100);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
+            // TranslatedTextbox
+            // 
+            this.TranslatedTextbox.Location = new System.Drawing.Point(315, 3);
+            this.TranslatedTextbox.Name = "TranslatedTextbox";
+            this.TranslatedTextbox.Size = new System.Drawing.Size(200, 100);
+            this.TranslatedTextbox.TabIndex = 2;
+            this.TranslatedTextbox.Text = "";
+            // 
+            // CopyButton
+            // 
+            this.CopyButton.AutoSize = true;
+            this.CopyButton.Location = new System.Drawing.Point(171, 169);
+            this.CopyButton.Name = "CopyButton";
+            this.CopyButton.Size = new System.Drawing.Size(86, 23);
+            this.CopyButton.TabIndex = 2;
+            this.CopyButton.Text = "Copy [Ctrl + C]";
+            this.CopyButton.UseVisualStyleBackColor = true;
+            // 
+            // ReplaceTextButton
+            // 
+            this.ReplaceTextButton.AutoSize = true;
+            this.ReplaceTextButton.Location = new System.Drawing.Point(263, 169);
+            this.ReplaceTextButton.Name = "ReplaceTextButton";
+            this.ReplaceTextButton.Size = new System.Drawing.Size(130, 23);
+            this.ReplaceTextButton.TabIndex = 3;
+            this.ReplaceTextButton.Text = "Replace text [Ctrl + X]";
+            this.ReplaceTextButton.UseVisualStyleBackColor = true;
+            // 
+            // translateButton
+            // 
+            this.translateButton.Location = new System.Drawing.Point(3, 159);
+            this.translateButton.Name = "translateButton";
+            this.translateButton.Size = new System.Drawing.Size(75, 23);
+            this.translateButton.TabIndex = 4;
+            this.translateButton.Text = "Translate";
+            this.translateButton.UseVisualStyleBackColor = true;
+            // 
+            // OverlayWindow
+            // 
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(549, 204);
+            this.ControlBox = false;
+            this.Controls.Add(this.translateButton);
+            this.Controls.Add(this.ReplaceTextButton);
+            this.Controls.Add(this.CopyButton);
+            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.pictureBox1);
+            this.Name = "OverlayWindow";
+            this.TopMost = true;
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+        
+        public async void OverlayWindow_Load(Form1 form1)
+        {
+            ComboBox inputbox = form1.InputcomboBox1;
+            ComboBox OutputBox = form1.OutputcomboBox2;
+
+            if(inputbox.SelectedIndex != -1)
             {
-                formOverlay.Cursor = Cursors.NoMove2D;
-                if (e.Button == MouseButtons.Left)
+                object d = Enum.Parse(typeof(GoogleTranslator.LANG), inputbox.SelectedText);
+                Console.WriteLine(d);
+            }
+            TranslatedText = GoogleTranslator.Translate(Clipboard.GetText(), LangEntrada(), LangSaida());
+
+            Point MousePos = new Point(Cursor.Position.X, Cursor.Position.Y - 150);
+            if (!OverlayOpenned)
+            {
+                if (!BindingKey)
                 {
-                    MousePos = new Point(Cursor.Position.X, Cursor.Position.Y);
-                    formOverlay.Location = MousePos;
+                    Keys KEY_ = replaceKey;
+                    List<ModifierKeys> mod = new List<ModifierKeys>();
+
+                    int replacespecialkeycount = KEY_.ToString().Split(',').Length;
+
+                    for (int i = 0; i < replacespecialkeycount; i++)
+                    {
+                        Keys replacespecialKey = (Keys)Enum.Parse(typeof(Keys), KEY_.ToString().Split(',')[i], true);
+                        if (replacespecialKey == Keys.Alt)
+                            mod.Add(Classes.ModifierKeys.Alt);
+                        else if (replacespecialKey == Keys.Control)
+                            mod.Add(Classes.ModifierKeys.Control);
+                        else if (replacespecialKey == Keys.Shift)
+                            mod.Add(Classes.ModifierKeys.Shift);
+                        else if (replacespecialKey == Keys.LWin)
+                            mod.Add(Classes.ModifierKeys.Win);
+
+                        if (i >= 2)
+                            break;
+                    }
+                    Keys key = (Keys)Enum.Parse(typeof(Keys), KEY_.ToString().Split(',')[0], true);
+
+                    hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+                    if (key == Keys.None)
+                    {
+                        hook.RegisterHotKey(Classes.ModifierKeys.Control, Keys.C);
+                        ReplaceTextButton.Text = $"Replace [{Classes.ModifierKeys.Control}+{Keys.C}]";
+                    }
+                    else if (mod.Count == 1)
+                    {
+                        hook.RegisterHotKey(mod[0], key);
+                        ReplaceTextButton.Text = $"Replace [{mod[0]}+{key}]";
+                    }
+                    else if (mod.Count == 2)
+                    {
+                        hook.RegisterHotKey(mod[0] | mod[1], key);
+                        ReplaceTextButton.Text = $"Replace [{mod[0]}+{mod[1]}+{key}]";
+                    }
+                    BindingKey = true;
+                }
+
+                if (Clipboard.ContainsText())
+                {
+                    string Input = Clipboard.GetText();
+                    string Output = "";
+
+                    if (!form1.ReplaceAutomatic.Checked)
+                    {
+                        if(!form1.copyautomatic.Checked)
+                        {
+                            Show();
+                            Location = MousePos;
+                            OverlayOpenned = true;
+                        }
+
+                        OriginalTextbox.Text = Input;
+                        await Task.Factory.StartNew(() =>
+                        {
+                            try
+                            {
+                                Output = TranslatedText;
+                            }
+                            catch (FaultException FE)
+                            {
+                                Output = "ERROR";
+                                Console.WriteLine(FE.Message);
+                            }
+                        });
+                        TranslatedTextbox.Text = Output;
+                    }else
+                    {
+                        WshShell shell = new WshShell();
+                        Output = TranslatedText;
+                        Thread.Sleep(300);
+                        shell.SendKeys(Output);
+                    }
+                    if(form1.copyautomatic.Checked)
+                    {
+                        Output = TranslatedText;
+                        Clipboard.SetText(Output);
+                    }
+                }
+                else
+                {
+                    WarnTimestampForm warn = new WarnTimestampForm();
+                    warn.loadwarn(2);
+                }
+            }
+            else
+                Location = MousePos;
+
+            translateButton.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+                string Output = "";
+                string Input = OriginalTextbox.Text;
+                try
+                {
+                    Output = TranslatedText;
+                }
+                catch (FaultException FE)
+                {
+                    Output = "ERROR";
+                    Console.WriteLine(FE.Message);
+                }
+                TranslatedTextbox.Text = Output;
+            });
+
+            CopyButton.Click += new EventHandler((object sender, EventArgs e) =>
+            {
+                string Input = OriginalTextbox.Text;
+                string Output = "";
+                Output = TranslatedText;
+                if (Clipboard.GetText().Length > 1)
+                {
+                    Clipboard.SetText(TranslatedTextbox.Text);
                 }
             });
-            moveBox.MouseLeave += new EventHandler((object sender, EventArgs e) =>
+            ReplaceTextButton.Click += new EventHandler((object sender, EventArgs e) =>
             {
-                formOverlay.Cursor = Cursors.Default;
+                OverlayOpenned = false;
+                Hide();
+                if (Clipboard.GetText().Length > 1)
+                {
+                    WshShell shell = new WshShell();
+                    Thread.Sleep(300);
+                    shell.SendKeys(TranslatedText);
+                }
             });
-            formOverlay.Deactivate += new EventHandler((object sender, EventArgs e) =>
+
+            pictureBox1.MouseMove += new MouseEventHandler((object sender, MouseEventArgs e) =>
             {
-                formOverlay.Opacity = 0.4;
+                Cursor = Cursors.SizeAll;
+                if (e.Button == MouseButtons.Left)
+                {
+                    Point MousePos1 = new Point(Cursor.Position.X, Cursor.Position.Y);
+                    Location = MousePos1;
+                }
             });
-            formOverlay.Activated += new EventHandler((object sender, EventArgs e) =>
-            {
-                formOverlay.Opacity = 0.7;
-            });
-            formOverlay.FormClosing += new FormClosingEventHandler((object sender, FormClosingEventArgs e) =>
+
+            pictureBox1.MouseLeave += new EventHandler((object sender, EventArgs e) => { Cursor = Cursors.Default; });
+            Activated += new EventHandler((object sender, EventArgs e) => { Opacity = opacityOut; });
+            Deactivate += new EventHandler((object sender, EventArgs e) => { Opacity = opacityIn; });
+
+            FormClosing += new FormClosingEventHandler((object sender, FormClosingEventArgs e) =>
             {
                 e.Cancel = true;
                 OverlayOpenned = false;
-                formOverlay.Dispose();
-                formOverlay.Close();
-
+                Hide();
             });
-
-            moveBox.Image = MoveImage;
-
-            formOverlay.ControlBox = false;
-            formOverlay.TopMost = true;
+        }
+        private void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            try
+            {
+                OverlayOpenned = false;
+                Hide();
+                if (Clipboard.GetText().Length > 1)
+                {
+                    Clipboard.SetText(TranslatedTextbox.Text);
+                    SendKeys.Send("^{v}");
+                }
+            }catch
+            {
+                Console.WriteLine("Janela não aberta");
+            }
             
-            formOverlay.AutoSize = true;
-
-            formOverlay.Controls.Add(moveBox);
-
-            FlowLayoutPanel flowLayoutPanel = new FlowLayoutPanel();
-            flowLayoutPanel.Location = new Point(0,50);
-            flowLayoutPanel.AutoSize = true;
-            flowLayoutPanel.FlowDirection = FlowDirection.LeftToRight;
-
-
-            Bitmap equals = new Bitmap(Resources.equals);
-
-            RichTextBox OriginalTextbox = new RichTextBox();
-            OriginalTextbox.Size = RichBoxSize;
-
-            PictureBox equalsimage = new PictureBox();
-            equalsimage.Image = equals;
-            equalsimage.SizeMode = PictureBoxSizeMode.Zoom;
-
-            RichTextBox TranslatedTextbox = new RichTextBox();
-            TranslatedTextbox.Size = RichBoxSize;
-
-            flowLayoutPanel.Controls.Add(OriginalTextbox);
-            flowLayoutPanel.Controls.Add(equalsimage);
-            flowLayoutPanel.Controls.Add(TranslatedTextbox);
-
-            FlowLayoutPanel ButtonsFlow = new FlowLayoutPanel();
-            ButtonsFlow.AutoSize = true;
-            ButtonsFlow.Size = new Size(100,50);
-            ButtonsFlow.Location = new Point(0,180);
-            ButtonsFlow.FlowDirection = FlowDirection.RightToLeft;
-
-            Button CopyButton = new Button();
-            CopyButton.AutoSize = true;
-            CopyButton.Text = "Copy [Ctrl + C]";
-
-            Button ReplaceTextButton = new Button();
-            ReplaceTextButton.AutoSize = true;
-            ReplaceTextButton.Text = "Replace Text [Ctrl + X]";
-
-            ButtonsFlow.Controls.Add(CopyButton);
-            ButtonsFlow.Controls.Add(ReplaceTextButton);
-
-            formOverlay.Controls.Add(ButtonsFlow);
-            formOverlay.Controls.Add(flowLayoutPanel);
-
-            formOverlay.Show();
-            formOverlay.Location = MousePos;
-            OverlayOpenned = true;
         }
     }
 }

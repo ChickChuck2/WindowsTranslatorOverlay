@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "metal-incline-323422",
+  "private_key_id": "87cd5c90a40307d697e3ab086a2b081d6cc072fe",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQChdax8+dNuSKBc\nnoe27oAbbhvGWrrZqyfuTbsADqWU+1d8sYykU7Roq2dbFmGW4G2kRjbYuUadCl9R\n+CxIaZTRiogydaHFOgFzDWcvz7BqYF7P8jhCgQ+aqiRy6JRzfGBsMZ/rE8rs9tnv\nzHrMcaN7Y0SqbTODwawmhADFTo/9VH0LxELbozBzfQ3vWKQ6WO1KTtqwtFa4jM93\n4MQTZCF/+TunYQgexCtZTRQ1yw7lqO1ZTuNUjOGPgxw8QSZBPEcMhZO1YPgEbqxk\nCSsy+oYsDCLlGvJoXyLaLQjgzlhfE7O85VvppLM9OjE5q4GQ3aFClGJ9495+b5rm\nLoJ3of7nAgMBAAECggEANIFP1lRnrTVw8K2c9KAaiNEFtztKB/7gvV4JsbsRnaEe\nki4qzkVqJZ+XvMdKdQYGoaUzsMaPcAIvfTh3LhUnj/y8zavzL2/tiLyTEbk4ZV9x\nda4PHZFawbESqUt4+xU3RffdSVTmaKjdtl2IkXNi9n0Rl1prpi0VDnFezsr9iCOs\nfLSqCHUrJdfawTIr2NHaZdkOCcPiG0MPMrwRVdRQDXQ1El+ddOy3cXYDVC/Etl9S\n+2H2LCYZiYiZlbWFMFwUmX4c2YUJJfKlu79e0da7wQDMoW68bgXb8jU1G+eCsvzG\nhTt2RGfVMKCa1fCWY+VVR4Mx0at0v3or7IBmqyO8AQKBgQDjEx56RuJfvWcMg/P+\njbOwI+q+jL2OaXp5LiXOhaKxcI8/laoyNjlXuH8kSQlk5/+Db9ZomuEnFGh2svfM\n9KAQu1DUUesZ0vJ7yytsiTcH9pabqvSHbMweAEO7yaXIoixrqfOXJKtqzQ52wtkj\n7UmVK+eOtUlViza2O4yXx8hLTwKBgQC2BtshyvYCW1XOYT5vuoLMPZrWiHUaMWl3\nd7ian8D7kg2zudN5aM3yBDLH04rISJF4MqLvaJxI5lJYS5qD5TIQAQeBmmedGbQr\nbV6ULJRvUS0Zppokreax62MQJvV0g0CJZS3JYjW1TzyA64mRq1E/DrGFHlqmapYp\nZCRgjeZM6QKBgHNZA/NjTJ0LrmwaH3igbLW+GQHApo3QIOmruoLFOZbfMbVABpvJ\nFansy5EYFNCQVShkSEsM2fCrGkGpud0AKss1C+M+1alhkdG2rBFPRogiB/F9jwe4\nCZv30HB1B2T6lIwAYf/WHcl77qv/YKQyZl2DVvYUOvNca2d4qntzfdhbAoGARQoa\nqRmK71/nDqzxen0aSQ8AoGgHSlT9dJOTEAqRrpk52zYbEIyAuE+BVytUExz7F8TU\n6csao8e/6b9bLrWKpGlPiIegzwRFwsbrvXWfIw199qGrC0huHIN0AldUd8mke7hF\ngoFeb5NLFna/qeF5oloXWK8noMECjVZvObP4aqkCgYADkMZQ9X4orxW/GOtU4lHj\nUZQwh/RvQDq3tfyHlH0sqqeojP6NDAbBVQ5vhMEuMpZioU+nV9WA+9JkmcjPu5S6\nAma6eI7ffqogjw76BFDUF/M1ohYJmPsRwgm4+dIvfGO3UEZ65uRF4jf2dN/WGWLX\nLL9cNGiSkpORMgWuk0kWYA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "translatorapi-379@metal-incline-323422.iam.gserviceaccount.com",
+  "client_id": "100004958419852215244",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/translatorapi-379%40metal-incline-323422.iam.gserviceaccount.com"
+}
