@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Windows.Forms;
 using WindowsTranslatorOverlay.Classes;
 
@@ -43,9 +44,42 @@ namespace WindowsTranslatorOverlay
             return base.ProcessCmdKey(ref msg, KeyData);
         }
 
+        public ComboboxItem BoxContent(ComboBox comboBox)
+        {
+            if (comboBox.SelectedIndex == -1)
+                return new ComboboxItem { Text = "Português", Value = "pt" };
+            return comboBox.SelectedItem as ComboboxItem;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            Console.WriteLine(GoogleTranslator.Translate("fodase?",GoogleTranslator.LangCode.auto, GoogleTranslator.LangCode.ru));
+
             notifyIcon1.Visible = true;
+
+            InputcomboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            OutputcomboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            InputcomboBox1.Items.Add(new ComboboxItem { Text = "auto", Value = "auto" });
+            for (int i = 0; i < GoogleTranslator.ValueName().Count; i++)
+            {
+                InputcomboBox1.Items.Add(new ComboboxItem { Text = GoogleTranslator.ValueName()[i].Key, Value = GoogleTranslator.ValueName()[i].Value });
+                OutputcomboBox2.Items.Add(new ComboboxItem { Text = GoogleTranslator.ValueName()[i].Key, Value = GoogleTranslator.ValueName()[i].Value });
+            }
+
+            InputcomboBox1.SelectedIndexChanged += new EventHandler((object sender1, EventArgs e1) =>
+            {
+                string Key = BoxContent(InputcomboBox1).Text;
+                string Value = BoxContent(InputcomboBox1).Value.ToString();
+
+            });
+            OutputcomboBox2.SelectedIndexChanged += new EventHandler((object sender1, EventArgs e1) =>
+            {
+                string Key = BoxContent(OutputcomboBox2).Text;
+                string Value = BoxContent(OutputcomboBox2).Value.ToString();
+
+            });
+
             string CurrentPath = Application.StartupPath;
             if (!File.Exists($@"{CurrentPath}\configs.json"))
             {
@@ -54,17 +88,6 @@ namespace WindowsTranslatorOverlay
             }
             else
                 managerSettings.LoadOrCreateConfig(Typefile.Load, overlayWindow, this);
-
-            InputcomboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            OutputcomboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
-            GoogleTranslator translator = new GoogleTranslator();
-            InputcomboBox1.Items.Add("auto");
-            for (int i = 0; i < translator.ValueName().Count; i++)
-            {
-                InputcomboBox1.Items.Add(translator.ValueName()[i].Key);
-                OutputcomboBox2.Items.Add(translator.ValueName()[i].Key);
-            }
-            Console.WriteLine(InputcomboBox1.SelectedIndex);
 
             string hotkeyplaceholder = "";
 
@@ -85,7 +108,6 @@ namespace WindowsTranslatorOverlay
                     mod.Add(Classes.ModifierKeys.Shift);
                 else if (movespecialKey == Keys.LWin)
                     mod.Add(Classes.ModifierKeys.Win);
-
                 if (i >= 2)
                     break;
             }
@@ -114,15 +136,19 @@ namespace WindowsTranslatorOverlay
             KeyPreview = true;
             Hide();
 
-            Uri logourl = new Uri("https://github.com/ChickChuck2/WindowsTranslatorOverlay/blob/master/WindowsTranslatorOverlay/Resources/icon2.png?raw=true");
+            if (!File.Exists($@"{Application.StartupPath}\logo.png"))
+            {
+                WebClient client = new WebClient();
+                Uri logourl = new Uri("https://media.discordapp.net/attachments/770093105516642305/962842510533722172/icon2.png", UriKind.Absolute);
+                client.DownloadFile(logourl, $@"{Application.StartupPath}\logo.png");
+            }
             new ToastContentBuilder()
-                .AddAppLogoOverride(logourl)
+                .AddAppLogoOverride(new Uri($@"{Application.StartupPath}\logo.png"))
                 .AddText("Rodando em segundo plano")
                 .AddText($"{hotkeymessage}")
+                .AddText($"Atualmente {InputcomboBox1.SelectedText} >> {OutputcomboBox2.SelectedText}")
                 .Show();
-
             overlayWindow.replaceKey = replaceKey;
-
             HideForm();
         }
 

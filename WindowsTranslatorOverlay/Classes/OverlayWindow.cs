@@ -35,16 +35,6 @@ namespace WindowsTranslatorOverlay.Classes
             InitializeComponent();
         }
 
-        public static GoogleTranslator.LANG LangEntrada(GoogleTranslator.LANG Entrada = GoogleTranslator.LANG.auto)
-        {
-            return Entrada;
-        }
-
-        public static GoogleTranslator.LANG LangSaida(GoogleTranslator.LANG Saida = GoogleTranslator.LANG.en)
-        {
-            return Saida;
-        }
-
         private string TranslatedText = "";
 
         private void InitializeComponent()
@@ -164,12 +154,7 @@ namespace WindowsTranslatorOverlay.Classes
             ComboBox inputbox = form1.InputcomboBox1;
             ComboBox OutputBox = form1.OutputcomboBox2;
 
-            if(inputbox.SelectedIndex != -1)
-            {
-                object d = Enum.Parse(typeof(GoogleTranslator.LANG), inputbox.SelectedText);
-                Console.WriteLine(d);
-            }
-            TranslatedText = GoogleTranslator.Translate(Clipboard.GetText(), LangEntrada(), LangSaida());
+            TranslatedText = GoogleTranslator.Translate(Clipboard.GetText(), GoogleTranslator.InputCode(form1.BoxContent(inputbox).Value.ToString()), GoogleTranslator.OutputCode(form1.BoxContent(OutputBox).Value.ToString()));
 
             Point MousePos = new Point(Cursor.Position.X, Cursor.Position.Y - 150);
             if (!OverlayOpenned)
@@ -271,15 +256,10 @@ namespace WindowsTranslatorOverlay.Classes
             {
                 string Output = "";
                 string Input = OriginalTextbox.Text;
-                try
-                {
-                    Output = TranslatedText;
-                }
-                catch (FaultException FE)
-                {
-                    Output = "ERROR";
-                    Console.WriteLine(FE.Message);
-                }
+
+
+                Output = GoogleTranslator.Translate(Input, GoogleTranslator.InputCode(form1.BoxContent(inputbox).Value.ToString()), GoogleTranslator.OutputCode(form1.BoxContent(OutputBox).Value.ToString()));
+
                 TranslatedTextbox.Text = Output;
             });
 
@@ -289,9 +269,8 @@ namespace WindowsTranslatorOverlay.Classes
                 string Output = "";
                 Output = TranslatedText;
                 if (Clipboard.GetText().Length > 1)
-                {
                     Clipboard.SetText(TranslatedTextbox.Text);
-                }
+
             });
             ReplaceTextButton.Click += new EventHandler((object sender, EventArgs e) =>
             {
@@ -341,7 +320,6 @@ namespace WindowsTranslatorOverlay.Classes
             {
                 Console.WriteLine("Janela não aberta");
             }
-            
         }
     }
 }

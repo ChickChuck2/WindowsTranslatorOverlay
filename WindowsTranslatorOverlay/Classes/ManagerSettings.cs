@@ -30,6 +30,12 @@ namespace WindowsTranslatorOverlay.Classes
 
                     writer.WriteStartObject();
 
+                    writer.WritePropertyName("InputValue");
+                    writer.WriteValue(0);
+
+                    writer.WritePropertyName("OutputValue");
+                    writer.WriteValue(52);
+
                     writer.WritePropertyName("startwithwindows");
                     writer.WriteValue(false);
 
@@ -101,6 +107,9 @@ namespace WindowsTranslatorOverlay.Classes
 
                 dynamic Shortcuts = data.Shortcuts[0];
 
+                int InputValue = data.InputValue;
+                int OutputValue = data.OutputValue;
+
                 Keys showmoveoverlay = Shortcuts.showmoveoverlay;
                 Keys copytrans = Shortcuts.copytrans;
                 Keys replace = Shortcuts.replace;
@@ -109,6 +118,9 @@ namespace WindowsTranslatorOverlay.Classes
 
                 float transparencyin = transparency.transparencyin;
                 float transparencyout = transparency.transparencyout;
+
+                form1.InputcomboBox1.SelectedIndex = InputValue;
+                form1.OutputcomboBox2.SelectedIndex = OutputValue;
 
                 form1.checkboxWindows.Checked = startwithwindows;
                 form1.startwithwindowsbool = startwithwindows;
@@ -142,6 +154,9 @@ namespace WindowsTranslatorOverlay.Classes
 
                 string json = File.ReadAllText($@"{apppath}\configs.json");
                 dynamic jsonobj = JsonConvert.DeserializeObject(json);
+
+                jsonobj.InputValue = form1.InputcomboBox1.SelectedIndex;
+                jsonobj.OutputValue = form1.OutputcomboBox2.SelectedIndex;
 
                 jsonobj.startwithwindows = form1.checkboxWindows.Checked;
 
