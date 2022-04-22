@@ -11,7 +11,7 @@ namespace WindowsTranslatorOverlay.Classes
 {
     internal class StartWithWindows
     {
-        private string AppName = "WindowsTranslatorOverlay";
+        private readonly string AppName = "WindowsTranslatorOverlay";
         public void SetStartup(CheckBox CheckStartup)
         {
             RegistryKey rk = Registry.CurrentUser.OpenSubKey

@@ -76,8 +76,7 @@ namespace WindowsTranslatorOverlay.Classes
             else if (LangSaida == LangCode.auto)
                 throw new Exception("Linguagem de Saída não pode ser automatica.");
 
-            string url = "";
-
+            string url;
             if (LangEntrada  == LangCode.zhCN)
                 url = $"https://translate.google.com/m?sl=zh-CN&tl={LangSaida}&q={query}";
             else if(LangSaida == LangCode.zhCN)

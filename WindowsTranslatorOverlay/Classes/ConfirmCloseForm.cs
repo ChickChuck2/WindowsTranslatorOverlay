@@ -36,12 +36,12 @@ namespace WindowsTranslatorOverlay.Classes
         {
 
         }
-        private void cancelbutton_Click(object sender, EventArgs e)
+        private void Cancelbutton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void closebutton_Click(object sender, EventArgs e)
+        private void Closebutton_Click(object sender, EventArgs e)
         {
             Process.GetCurrentProcess().Kill();
         }

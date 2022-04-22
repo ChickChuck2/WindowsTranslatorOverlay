@@ -18,8 +18,7 @@ namespace WindowsTranslatorOverlay.Classes
         public float opacityIn;
 
         public Keys replaceKey;
-
-        KeyboardHook hook = new KeyboardHook();
+        readonly KeyboardHook hook = new KeyboardHook();
 
         private PictureBox pictureBox1;
         private FlowLayoutPanel flowLayoutPanel1;
@@ -183,7 +182,7 @@ namespace WindowsTranslatorOverlay.Classes
                     }
                     Keys key = (Keys)Enum.Parse(typeof(Keys), KEY_.ToString().Split(',')[0], true);
 
-                    hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+                    hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(Hook_KeyPressed);
                     if (key == Keys.None)
                     {
                         hook.RegisterHotKey(Classes.ModifierKeys.Control, Keys.C);
@@ -246,7 +245,7 @@ namespace WindowsTranslatorOverlay.Classes
                 else
                 {
                     WarnTimestampForm warn = new WarnTimestampForm();
-                    warn.loadwarn(2);
+                    warn.Loadwarn(2);
                 }
             }
             else
@@ -305,7 +304,7 @@ namespace WindowsTranslatorOverlay.Classes
                 Hide();
             });
         }
-        private void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        private void Hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
             try
             {

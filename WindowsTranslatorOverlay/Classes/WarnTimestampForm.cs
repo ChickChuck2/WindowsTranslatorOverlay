@@ -57,13 +57,13 @@ namespace WindowsTranslatorOverlay.Classes
         {
             CountSeconds(3);
         }
-        public void loadwarn(int seconds)
+        public void Loadwarn(int seconds)
         {
             Show();
             CountSeconds(seconds);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             Close();
         }

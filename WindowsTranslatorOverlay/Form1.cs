@@ -15,10 +15,11 @@ namespace WindowsTranslatorOverlay
         {
             InitializeComponent();
         }
-        KeyboardHook hook = new KeyboardHook();
 
-        private ManagerSettings managerSettings = new ManagerSettings();
-        private OverlayWindow overlayWindow = new OverlayWindow();
+        readonly KeyboardHook hook = new KeyboardHook();
+
+        private readonly ManagerSettings managerSettings = new ManagerSettings();
+        private readonly OverlayWindow overlayWindow = new OverlayWindow();
 
         public static bool ShowForm1 = true;
 
@@ -114,7 +115,7 @@ namespace WindowsTranslatorOverlay
             hotkeyplaceholder = string.Join($"+", mod.ToArray());
             string hotkeymessage = "";
 
-            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
+            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(Hook_KeyPressed);
             if (moveoverlayKey == Keys.None)
             {
                 hook.RegisterHotKey(Classes.ModifierKeys.Control | Classes.ModifierKeys.Alt, Keys.X);
@@ -152,7 +153,7 @@ namespace WindowsTranslatorOverlay
             HideForm();
         }
 
-        void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        void Hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
             overlayWindow.OverlayWindow_Load(this);
         }
@@ -187,30 +188,30 @@ namespace WindowsTranslatorOverlay
 
         }
 
-        private void fecharToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FecharToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.GetCurrentProcess().Kill();
         }
-        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        private void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             KeysConverter converter = new KeysConverter();
             textboxOverlay.Text = converter.ConvertToString(e.KeyData);
             moveoverlayKey = e.KeyData;
         }
-        private void textboxCopyT_KeyDown(object sender, KeyEventArgs e)
+        private void TextboxCopyT_KeyDown(object sender, KeyEventArgs e)
         {
             KeysConverter converter = new KeysConverter();
             textboxCopyT.Text = converter.ConvertToString(e.KeyData);
             copyTKey = e.KeyData;
         }
-        private void textboxReplaceText_KeyDown(object sender, KeyEventArgs e)
+        private void TextboxReplaceText_KeyDown(object sender, KeyEventArgs e)
         {
             KeysConverter converter = new KeysConverter();
             textboxReplaceText.Text = converter.ConvertToString(e.KeyData);
             replaceKey = e.KeyData;
         }
 
-        private void opacityIn_MouseDown(object sender, MouseEventArgs e)
+        private void OpacityIn_MouseDown(object sender, MouseEventArgs e)
         {
             FopacityIn = (float)Math.Round(FopacityIn * 100f) / 100f;
             
@@ -218,7 +219,7 @@ namespace WindowsTranslatorOverlay
             {
                 if (FopacityIn < 1)
                 {
-                    FopacityIn = FopacityIn + 0.1f;
+                    FopacityIn += 0.1f;
                     opacityIn.Text = FopacityIn.ToString();
                 }
             }
@@ -226,13 +227,13 @@ namespace WindowsTranslatorOverlay
             {
                 if (FopacityIn > 0.1f)
                 {
-                    FopacityIn = FopacityIn - 0.1f;
+                    FopacityIn -= 0.1f;
                     opacityIn.Text = FopacityIn.ToString();
                 }
             }
         }
 
-        private void opacityOut_MouseDown(object sender, MouseEventArgs e)
+        private void OpacityOut_MouseDown(object sender, MouseEventArgs e)
         {
             FopacityOut = (float)Math.Round(FopacityOut * 100f) / 100f;
 
@@ -241,7 +242,7 @@ namespace WindowsTranslatorOverlay
             {
                 if (FopacityOut < 1)
                 {
-                    FopacityOut = FopacityOut + 0.1f;
+                    FopacityOut += 0.1f;
                     opacityOut.Text = FopacityOut.ToString();
                 }
             }
@@ -249,7 +250,7 @@ namespace WindowsTranslatorOverlay
             {
                 if(FopacityOut > 0.1f)
                 {
-                    FopacityOut = FopacityOut - 0.1f;
+                    FopacityOut -= 0.1f;
                     opacityOut.Text = FopacityOut.ToString();
                 }
             }
@@ -260,7 +261,7 @@ namespace WindowsTranslatorOverlay
             managerSettings.LoadOrCreateConfig(Typefile.Save, overlayWindow, this);
         }
 
-        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        private void NotifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Normal;
             ShowInTaskbar = true;
@@ -269,12 +270,12 @@ namespace WindowsTranslatorOverlay
             TopMost = false;
         }
 
-        private void fecharToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void FecharToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Process.GetCurrentProcess().Kill();
         }
 
-        private void mostrarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MostrarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Normal;
             ShowInTaskbar = true;

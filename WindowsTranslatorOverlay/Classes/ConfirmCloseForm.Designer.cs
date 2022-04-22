@@ -42,7 +42,7 @@
             this.closebutton.TabIndex = 0;
             this.closebutton.Text = "Close [C]";
             this.closebutton.UseVisualStyleBackColor = true;
-            this.closebutton.Click += new System.EventHandler(this.closebutton_Click);
+            this.closebutton.Click += new System.EventHandler(this.Closebutton_Click);
             // 
             // traybutton
             // 
@@ -61,7 +61,7 @@
             this.cancelbutton.TabIndex = 2;
             this.cancelbutton.Text = "Cancel [S]";
             this.cancelbutton.UseVisualStyleBackColor = true;
-            this.cancelbutton.Click += new System.EventHandler(this.cancelbutton_Click);
+            this.cancelbutton.Click += new System.EventHandler(this.Cancelbutton_Click);
             // 
             // ConfirmCloseForm
             // 

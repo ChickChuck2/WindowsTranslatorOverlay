@@ -93,14 +93,14 @@
             this.fecharToolStripMenuItem.Name = "fecharToolStripMenuItem";
             this.fecharToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.fecharToolStripMenuItem.Text = "Fechar";
-            this.fecharToolStripMenuItem.Click += new System.EventHandler(this.fecharToolStripMenuItem_Click);
+            this.fecharToolStripMenuItem.Click += new System.EventHandler(this.FecharToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
             this.notifyIcon1.ContextMenuStrip = this.trayItens;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Windows Translator Overlay";
-            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.NotifyIcon1_DoubleClick);
             // 
             // trayItens
             // 
@@ -116,7 +116,7 @@
             this.mostrarToolStripMenuItem.Name = "mostrarToolStripMenuItem";
             this.mostrarToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.mostrarToolStripMenuItem.Text = "Show";
-            this.mostrarToolStripMenuItem.Click += new System.EventHandler(this.mostrarToolStripMenuItem_Click);
+            this.mostrarToolStripMenuItem.Click += new System.EventHandler(this.MostrarToolStripMenuItem_Click);
             // 
             // fecharToolStripMenuItem1
             // 
@@ -125,7 +125,7 @@
             this.fecharToolStripMenuItem1.ShortcutKeyDisplayString = "";
             this.fecharToolStripMenuItem1.Size = new System.Drawing.Size(103, 22);
             this.fecharToolStripMenuItem1.Text = "Close";
-            this.fecharToolStripMenuItem1.Click += new System.EventHandler(this.fecharToolStripMenuItem1_Click);
+            this.fecharToolStripMenuItem1.Click += new System.EventHandler(this.FecharToolStripMenuItem1_Click);
             // 
             // splitContainer1
             // 
@@ -252,7 +252,7 @@
             this.textboxOverlay.ReadOnly = true;
             this.textboxOverlay.Size = new System.Drawing.Size(153, 20);
             this.textboxOverlay.TabIndex = 1;
-            this.textboxOverlay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.textboxOverlay.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1_KeyDown);
             // 
             // textboxCopyT
             // 
@@ -262,7 +262,7 @@
             this.textboxCopyT.ReadOnly = true;
             this.textboxCopyT.Size = new System.Drawing.Size(153, 20);
             this.textboxCopyT.TabIndex = 4;
-            this.textboxCopyT.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textboxCopyT_KeyDown);
+            this.textboxCopyT.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextboxCopyT_KeyDown);
             // 
             // textboxReplaceText
             // 
@@ -272,7 +272,7 @@
             this.textboxReplaceText.ReadOnly = true;
             this.textboxReplaceText.Size = new System.Drawing.Size(153, 20);
             this.textboxReplaceText.TabIndex = 6;
-            this.textboxReplaceText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textboxReplaceText_KeyDown);
+            this.textboxReplaceText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextboxReplaceText_KeyDown);
             // 
             // label3
             // 
@@ -291,7 +291,7 @@
             this.opacityOut.TabIndex = 6;
             this.opacityOut.Text = "0.4";
             this.opacityOut.UseVisualStyleBackColor = true;
-            this.opacityOut.MouseDown += new System.Windows.Forms.MouseEventHandler(this.opacityOut_MouseDown);
+            this.opacityOut.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OpacityOut_MouseDown);
             // 
             // label4
             // 
@@ -328,7 +328,7 @@
             this.opacityIn.TabIndex = 3;
             this.opacityIn.Text = "0.7";
             this.opacityIn.UseVisualStyleBackColor = true;
-            this.opacityIn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.opacityIn_MouseDown);
+            this.opacityIn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OpacityIn_MouseDown);
             // 
             // label6
             // 

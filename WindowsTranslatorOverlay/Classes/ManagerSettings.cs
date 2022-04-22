@@ -85,8 +85,7 @@ namespace WindowsTranslatorOverlay.Classes
                     {
                         JObject JOBe = JObject.Parse(sb.ToString());
 
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Formatting = Formatting.Indented;
+                        JsonSerializer serializer = new JsonSerializer { Formatting = Formatting.Indented };
                         serializer.Serialize(file, JOBe);
 
                         file.Dispose();

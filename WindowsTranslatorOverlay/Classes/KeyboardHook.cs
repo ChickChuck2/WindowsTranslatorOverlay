@@ -22,7 +22,7 @@ namespace WindowsTranslatorOverlay.Classes
         /// </summary>
         private class Window : NativeWindow, IDisposable
         {
-            private static int WM_HOTKEY = 0x0312;
+            private static readonly int WM_HOTKEY = 0x0312;
 
             public Window()
             {
@@ -46,8 +46,7 @@ namespace WindowsTranslatorOverlay.Classes
                     ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
                     // invoke the event to notify the parent.
-                    if (KeyPressed != null)
-                        KeyPressed(this, new KeyPressedEventArgs(modifier, key));
+                    KeyPressed?.Invoke(this, new KeyPressedEventArgs(modifier, key));
                 }
             }
 
@@ -63,7 +62,7 @@ namespace WindowsTranslatorOverlay.Classes
             #endregion
         }
 
-        private Window _window = new Window();
+        private readonly Window _window = new Window();
         private int _currentId;
 
         public KeyboardHook()
@@ -71,8 +70,7 @@ namespace WindowsTranslatorOverlay.Classes
             // register the event of the inner native window.
             _window.KeyPressed += delegate (object sender, KeyPressedEventArgs args)
             {
-                if (KeyPressed != null)
-                    KeyPressed(this, args);
+                KeyPressed?.Invoke(this, args);
             };
         }
 
@@ -84,7 +82,7 @@ namespace WindowsTranslatorOverlay.Classes
         public void RegisterHotKey(ModifierKeys modifier, Keys key)
         {
             // increment the counter.
-            _currentId = _currentId + 1;
+            _currentId++;
 
             // register the hot key.
             if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
@@ -118,8 +116,8 @@ namespace WindowsTranslatorOverlay.Classes
     /// </summary>
     public class KeyPressedEventArgs : EventArgs
     {
-        private ModifierKeys _modifier;
-        private Keys _key;
+        private readonly ModifierKeys _modifier;
+        private readonly Keys _key;
 
         internal KeyPressedEventArgs(ModifierKeys modifier, Keys key)
         {
