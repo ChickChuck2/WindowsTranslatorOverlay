@@ -54,8 +54,6 @@ namespace WindowsTranslatorOverlay
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Console.WriteLine(GoogleTranslator.Translate("fodase?",GoogleTranslator.LangCode.auto, GoogleTranslator.LangCode.ru));
-
             notifyIcon1.Visible = true;
 
             InputcomboBox1.DropDownStyle = ComboBoxStyle.DropDownList;

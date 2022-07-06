@@ -1,11 +1,19 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Text;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WindowsTranslatorOverlay.Classes
 {
+    public class DataObject
+    {
+        public string Output { get; set; }
+        public string Input { get; set; }
+    }
+
     public static class GoogleTranslator
     {
         public static LangCode InputCode(string value)
@@ -71,6 +79,8 @@ namespace WindowsTranslatorOverlay.Classes
 
         public static string Translate(string query, LangCode LangEntrada, LangCode LangSaida)
         {
+            query = query.Replace(" ", "%20");
+
             if (LangEntrada == LangCode.auto && LangSaida == LangCode.auto)
                 throw new Exception("Linguagem de Entrada e saída não podem ser automatico");
             else if (LangSaida == LangCode.auto)
@@ -84,21 +94,54 @@ namespace WindowsTranslatorOverlay.Classes
             else
                 url = $"https://translate.google.com/m?sl={LangEntrada}&tl={LangSaida}&q={query}";
 
-            HtmlWeb doc = new HtmlWeb();
+            HttpClient client = new HttpClient();
+            var newurl = $"https://translate.googleapis.com/translate_a/single";
+            var newurlParameters = $"?client=gtx&sl={LangEntrada}&tl={LangSaida}&dt=t&dj=1&source=input&q={query}";
+            client.BaseAddress = new Uri(newurl);
 
-            string docNode = doc.LoadFromBrowser(url).DocumentNode.SelectSingleNode("/html/body/div[1]/div[4]").InnerHtml;
-            string value = docNode.Replace("&#32", " ")
-                .Replace("&#33", "!")
-                .Replace("&#34", "“")
-                .Replace("&#35", "#")
-                .Replace("&#37", "%")
-                .Replace("&#44", ",")
-                .Replace("&#45", "-")
-                .Replace("&#46", ".")
-                .Replace("&#47", "/")
-                .Replace("&#39;", "'")
-                .Replace("&#39;;", "'");
-            return value;
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.GetAsync(newurlParameters).Result;
+
+            string Output = "";
+            string Input = "";
+
+            if (response.IsSuccessStatusCode)
+            {
+                string txt = response.Content.ReadAsStringAsync().Result;
+                dynamic json = JObject.Parse(txt);
+                foreach(dynamic sent in json.sentences)
+                {
+                    Output += (string)sent.trans;
+                    Input += (string)sent.orig;
+                }
+                
+            }
+            Console.WriteLine(
+                $"\n" +
+                $"Query: {query}" +
+                $"\n" +
+                $"Url: {newurl}{newurlParameters}" +
+                $"\n" +
+                $"Input: {Input}" +
+                $"\n"+
+                $"Output: {Output}" +
+                $"\n");
+
+            MatchCollection match = Regex.Matches( Input, @"\<<([^>>]*)\>>");
+            MatchCollection matchOut = Regex.Matches( Output, @"\<<([^>>]*)\>>");
+
+            List<(string CURRENT, string OLD)> replacear = new List<(string CURRENT, string OLD)>();
+
+            for (int i = 0; i < match.Count; i++)
+            {
+                Console.WriteLine(match[i].Groups[1]);
+                Console.WriteLine(matchOut[i].Groups[1]);
+                replacear.Add((matchOut[i].Groups[1].ToString(), match[i].Groups[1].ToString()));
+
+                Output = Output.Replace($"<<{matchOut[i].Groups[1].Value}>>", $"<<{match[i].Groups[1].Value}>>");
+            }
+            Console.WriteLine(Output);
+            return Output;
         }
     }
 }

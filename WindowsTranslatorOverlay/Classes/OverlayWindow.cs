@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.ServiceModel;
 using System.Threading;
 using IWshRuntimeLibrary;
+using AutoIt;
 
 namespace WindowsTranslatorOverlay.Classes
 {
@@ -152,7 +153,8 @@ namespace WindowsTranslatorOverlay.Classes
         {
             ComboBox inputbox = form1.InputcomboBox1;
             ComboBox OutputBox = form1.OutputcomboBox2;
-
+            AutoItX.Send("^c");
+            Thread.Sleep(500);
             TranslatedText = GoogleTranslator.Translate(Clipboard.GetText(), GoogleTranslator.InputCode(form1.BoxContent(inputbox).Value.ToString()), GoogleTranslator.OutputCode(form1.BoxContent(OutputBox).Value.ToString()));
 
             Point MousePos = new Point(Cursor.Position.X, Cursor.Position.Y - 150);
@@ -229,14 +231,14 @@ namespace WindowsTranslatorOverlay.Classes
                             }
                         });
                         TranslatedTextbox.Text = Output;
-                    }else
-                    {
-                        WshShell shell = new WshShell();
-                        Output = TranslatedText;
-                        Thread.Sleep(300);
-                        shell.SendKeys(Output);
                     }
-                    if(form1.copyautomatic.Checked)
+                    else
+                    {
+                        Output = TranslatedText;
+                        AutoItX.Send(Output);
+                    }
+                        
+                    if (form1.copyautomatic.Checked)
                     {
                         Output = TranslatedText;
                         Clipboard.SetText(Output);
@@ -313,7 +315,7 @@ namespace WindowsTranslatorOverlay.Classes
                 if (Clipboard.GetText().Length > 1)
                 {
                     Clipboard.SetText(TranslatedTextbox.Text);
-                    SendKeys.Send("^{v}");
+                    AutoItX.Send(TranslatedTextbox.Text);
                 }
             }catch
             {
