@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Windows.UI.Xaml;
 
 namespace WindowsTranslatorOverlay.Classes
 {
@@ -34,7 +37,22 @@ namespace WindowsTranslatorOverlay.Classes
 
         private void ConfirmCloseForm_Load(object sender, EventArgs e)
         {
-
+            int time = 3;
+			Task.Run(async() =>
+            {
+                while(true)
+                {
+                    Console.WriteLine(time);
+                    Invoke(new Action(() => timerlabel.Text = $"Fechando em: {time}"));
+                    await Task.Delay(1000);
+                    time--;
+                    if (time < 1)
+                    {
+                        Process.GetCurrentProcess().Kill();
+						break;
+					}
+                }
+			});
         }
         private void Cancelbutton_Click(object sender, EventArgs e)
         {
@@ -50,5 +68,6 @@ namespace WindowsTranslatorOverlay.Classes
         {
 
         }
+
     }
 }

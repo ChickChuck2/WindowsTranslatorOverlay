@@ -80,6 +80,7 @@ namespace WindowsTranslatorOverlay.Classes
         public static string Translate(string query, LangCode LangEntrada, LangCode LangSaida)
         {
             query = query.Replace(" ", "%20");
+            Console.WriteLine($"query: {query}");
 
             if (LangEntrada == LangCode.auto && LangSaida == LangCode.auto)
                 throw new Exception("Linguagem de Entrada e saída não podem ser automatico");
@@ -104,7 +105,6 @@ namespace WindowsTranslatorOverlay.Classes
 
             string Output = "";
             string Input = "";
-
             if (response.IsSuccessStatusCode)
             {
                 string txt = response.Content.ReadAsStringAsync().Result;
